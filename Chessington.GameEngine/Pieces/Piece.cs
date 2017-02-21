@@ -100,10 +100,9 @@ namespace Chessington.GameEngine.Pieces
             return moves;
         }
 
-        protected bool OutOfBounds(Square square)
+        protected bool Friendly(Piece piece)
         {
-            return Math.Min(square.Row, square.Col) < 0 ||
-                Math.Max(square.Row, square.Col) > 7;
+            return (piece != null && piece.Player == this.Player);
         }
 
         public Player Player { get; private set; }

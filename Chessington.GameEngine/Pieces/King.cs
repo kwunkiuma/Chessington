@@ -21,7 +21,7 @@ namespace Chessington.GameEngine.Pieces
                 for (var col = -1; col <= 1; col++)
                 {
                     var newPosition = Square.At(position.Row + row, position.Col + col);
-                    if (!newPosition.OutOfBounds())
+                    if (!newPosition.OutOfBounds() && !Friendly(board.GetPiece(newPosition)))
                     {
                         moves.Add(newPosition);
                     }
