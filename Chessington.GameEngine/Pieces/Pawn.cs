@@ -11,7 +11,7 @@ namespace Chessington.GameEngine.Pieces
 
         public override IEnumerable<Square> GetAvailableMoves(Board board)
         {
-            var result = new List<Square>();
+            var moves = new List<Square>();
 
             var pos = board.FindPiece(this);
 
@@ -20,14 +20,14 @@ namespace Chessington.GameEngine.Pieces
                     : -1
                 );
 
-            result.Add(Square.At(pos.Row + step, pos.Col));
+            moves.Add(Square.At(pos.Row + step, pos.Col));
 
             if (neverMoved)
             {
-                result.Add(Square.At(pos.Row + step*2, pos.Col));
+                moves.Add(Square.At(pos.Row + step*2, pos.Col));
             }
 
-            return result;
+            return moves;
         }
     }
 }
