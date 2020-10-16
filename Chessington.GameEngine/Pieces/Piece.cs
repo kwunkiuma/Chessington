@@ -57,6 +57,48 @@ namespace Chessington.GameEngine.Pieces
 
             return moves;
         }
+        protected HashSet<Square> DiagonalMoves(Board board)
+        {
+            var moves = new HashSet<Square>();
+            var position = board.FindPiece(this);
+
+            for (var i = 3; i < 7; i++)
+            {
+                var rowDiff = Convert.ToInt32(Math.Pow(-1, (i + 1) / 2));
+                var colDiff = Convert.ToInt32(Math.Pow(-1, i / 2));
+
+                var row = position.Row;
+                var col = position.Col;
+
+                row += rowDiff;
+                col += colDiff;
+
+                while (Math.Min(row, col) >= 0 && Math.Max(row, col) <= 7)
+                {
+                    if (board.GetPiece(Square.At(row, col)) != null)
+                    {
+                        if (board.GetPiece(Square.At(row, col)).Player != Player)
+                        {
+                            moves.Add(Square.At(row, col));
+                            break;
+                        }
+
+                        if (board.GetPiece(Square.At(row, col)).Player == Player)
+                        {
+                            break;
+                        }
+                    }
+
+                    moves.Add(Square.At(row, col));
+
+                    row += rowDiff;
+                    col += colDiff;
+                }
+            }
+
+            return moves;
+        }
+
         public Player Player { get; private set; }
 
         public abstract IEnumerable<Square> GetAvailableMoves(Board board);
