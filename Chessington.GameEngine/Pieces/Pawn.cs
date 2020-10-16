@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
+using Microsoft.Win32.SafeHandles;
 
 namespace Chessington.GameEngine.Pieces
 {
@@ -13,9 +15,17 @@ namespace Chessington.GameEngine.Pieces
 
             var pos = board.FindPiece(this);
 
-            result.Add(Player == Player.Black
-                ? Square.At(pos.Row + 1, pos.Col)
-                : Square.At(pos.Row - 1, pos.Col));
+            var step = (Player == Player.Black 
+                    ? 1
+                    : -1
+                );
+
+            result.Add(Square.At(pos.Row + step, pos.Col));
+
+            if (neverMoved)
+            {
+                result.Add(Square.At(pos.Row + step*2, pos.Col));
+            }
 
             return result;
         }
