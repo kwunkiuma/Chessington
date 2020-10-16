@@ -20,9 +20,14 @@ namespace Chessington.GameEngine.Pieces
                     : -1
                 );
 
+            if (board.GetPiece(Square.At(pos.Row + step, pos.Col)) != null)
+            {
+                return moves;
+            }
+
             moves.Add(Square.At(pos.Row + step, pos.Col));
 
-            if (neverMoved)
+            if (neverMoved && board.GetPiece(Square.At(pos.Row + step*2, pos.Col)) == null)
             {
                 moves.Add(Square.At(pos.Row + step*2, pos.Col));
             }
