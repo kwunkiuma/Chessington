@@ -21,6 +21,11 @@ namespace Chessington.GameEngine.Pieces
                     var rowDiff = Math.Abs(position.Row - row);
                     var colDiff = Math.Abs(position.Col - col);
 
+                    if (board.GetPiece(Square.At(row, col)) != null && board.GetPiece(Square.At(row, col)).Player == this.Player)
+                    {
+                        continue;
+                    }
+
                     if (rowDiff + colDiff == 3 && rowDiff * colDiff != 0)
                     {
                         moves.Add(Square.At(row, col));
