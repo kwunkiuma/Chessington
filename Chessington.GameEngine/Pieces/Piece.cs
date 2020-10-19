@@ -57,6 +57,7 @@ namespace Chessington.GameEngine.Pieces
 
             return moves;
         }
+
         protected HashSet<Square> DiagonalMoves(Board board)
         {
             var moves = new HashSet<Square>();
@@ -97,6 +98,12 @@ namespace Chessington.GameEngine.Pieces
             }
 
             return moves;
+        }
+
+        protected bool OutOfBounds(Square square)
+        {
+            return Math.Min(square.Row, square.Col) < 0 ||
+                Math.Max(square.Row, square.Col) > 7;
         }
 
         public Player Player { get; private set; }

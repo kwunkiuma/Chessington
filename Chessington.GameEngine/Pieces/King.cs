@@ -20,7 +20,11 @@ namespace Chessington.GameEngine.Pieces
             {
                 for (var col = -1; col <= 1; col++)
                 {
-                    moves.Add(Square.At(position.Row + row, position.Col + col));
+                    var newPosition = Square.At(position.Row + row, position.Col + col);
+                    if (!newPosition.OutOfBounds())
+                    {
+                        moves.Add(newPosition);
+                    }
                 }
             }
 
