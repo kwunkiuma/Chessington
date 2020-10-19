@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
-using Microsoft.Win32.SafeHandles;
 
 namespace Chessington.GameEngine.Pieces
 {
@@ -45,7 +43,7 @@ namespace Chessington.GameEngine.Pieces
 
             newPosition = Square.At(pos.Row + step * 2, pos.Col);
 
-            if (neverMoved && board.GetPiece(newPosition) == null && !newPosition.OutOfBounds())
+            if (NeverMoved && board.GetPiece(newPosition) == null && !newPosition.OutOfBounds())
             {
                 moves.Add(newPosition);
             }

@@ -8,12 +8,23 @@ namespace Chessington.GameEngine.Pieces
 {
     public abstract class Piece
     {
-        protected bool neverMoved;
+        public Player Player { get; private set; }
+
+        protected bool NeverMoved { get; private set; }
+
+        public abstract IEnumerable<Square> GetAvailableMoves(Board board);
+
+        public void MoveTo(Board board, Square newSquare)
+        {
+            var currentSquare = board.FindPiece(this);
+            board.MovePiece(currentSquare, newSquare);
+            NeverMoved = false;
+        }
 
         protected Piece(Player player)
         {
             Player = player;
-            neverMoved = true;
+            NeverMoved = true;
         }
 
         protected HashSet<Square> LateralMoves(Board board)
@@ -21,8 +32,9 @@ namespace Chessington.GameEngine.Pieces
             var moves = new HashSet<Square>();
             var position = board.FindPiece(this);
 
-            for (var i = 3; i < 7; i++)
+            for (var i = 2; i < 6; i++)
             {
+                // One of the two variables will be assigned to 1/-1 while the other is assigned 0
                 var rowDiff = Convert.ToInt32(Math.Pow(-(i % 2), i / 2));
                 var colDiff = Convert.ToInt32(Math.Pow(-1 + (i % 2), i / 2));
 
@@ -63,8 +75,9 @@ namespace Chessington.GameEngine.Pieces
             var moves = new HashSet<Square>();
             var position = board.FindPiece(this);
 
-            for (var i = 3; i < 7; i++)
+            for (var i = 2; i < 6; i++)
             {
+                // Iterates through combinations of 1 and -1
                 var rowDiff = Convert.ToInt32(Math.Pow(-1, (i + 1) / 2));
                 var colDiff = Convert.ToInt32(Math.Pow(-1, i / 2));
 
@@ -103,17 +116,6 @@ namespace Chessington.GameEngine.Pieces
         protected bool Friendly(Piece piece)
         {
             return (piece != null && piece.Player == this.Player);
-        }
-
-        public Player Player { get; private set; }
-
-        public abstract IEnumerable<Square> GetAvailableMoves(Board board);
-
-        public void MoveTo(Board board, Square newSquare)
-        {
-            var currentSquare = board.FindPiece(this);
-            board.MovePiece(currentSquare, newSquare);
-            neverMoved = false;
         }
     }
 }
