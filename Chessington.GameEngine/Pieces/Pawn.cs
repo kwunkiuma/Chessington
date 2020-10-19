@@ -21,6 +21,19 @@ namespace Chessington.GameEngine.Pieces
                     : -1
                 );
 
+            newPosition = Square.At(pos.Row + step, pos.Col + 1);
+            if (!newPosition.OutOfBounds() && board.GetPiece(newPosition) != null && !Friendly(board.GetPiece(newPosition)))
+            {
+                moves.Add(newPosition);
+            }
+
+            newPosition = Square.At(pos.Row + step, pos.Col - 1);
+
+            if (!newPosition.OutOfBounds() && board.GetPiece(newPosition) != null && !Friendly(board.GetPiece(newPosition)))
+            {
+                moves.Add(newPosition);
+            }
+
             newPosition = Square.At(pos.Row + step, pos.Col);
 
             if (newPosition.OutOfBounds() || board.GetPiece(newPosition) != null)
