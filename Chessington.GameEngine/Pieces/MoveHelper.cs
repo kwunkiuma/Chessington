@@ -1,90 +1,36 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.NetworkInformation;
+﻿using System.Collections.Generic;
 
 namespace Chessington.GameEngine.Pieces
 {
-    enum Lateral
-    {
-        Up,
-        Down,
-        Left,
-        Right
-    }
-
-    enum Diagonal
-    {
-        TopLeft,
-        TopRight,
-        BottomLeft,
-        BottomRight,
-    }
-
     class MoveHelper
     {
-        private Square position;
-
-        public MoveHelper()
+        public static Direction[] Lateral = new Direction[]
         {
-        }
+            new Direction(1, 0),
+            new Direction(-1, 0),
+            new Direction(0, 1),
+            new Direction(0, -1)
+        };
 
-        private static void GetChange(Object direction, out int rowChange, out int colChange)
+        public static Direction[] Diagonal = new Direction[]
         {
-            switch (direction)
-            {
-                case Diagonal.TopLeft:
-                    rowChange = -1;
-                    colChange = -1;
-                    break;
-                case Diagonal.TopRight:
-                    rowChange = -1;
-                    colChange = 1;
-                    break;
-                case Diagonal.BottomLeft:
-                    rowChange = 1;
-                    colChange = -1;
-                    break;
-                case Diagonal.BottomRight:
-                    rowChange = 1;
-                    colChange = 1;
-                    break;
-                case Lateral.Up:
-                    rowChange = -1;
-                    colChange = 0;
-                    break;
-                case Lateral.Down:
-                    rowChange = 1;
-                    colChange = 0;
-                    break;
-                case Lateral.Left:
-                    rowChange = 0;
-                    colChange = -1;
-                    break;
-                case Lateral.Right:
-                    rowChange = 0;
-                    colChange = 1;
-                    break;
-                default:
-                    rowChange = 0;
-                    colChange = 0;
-                    break;
-            }
-        }
+            new Direction(1, 1),
+            new Direction(-1, 1),
+            new Direction(1, -1),
+            new Direction(-1, -1)
+        };
 
-        public static HashSet<Square> GetStraightMoves(Board board, Piece piece, Type directions)
+        public static List<Square> GetStraightMoves(Board board, Piece piece, Direction[] directions)
         {
-            var moves = new HashSet<Square>();
+            var moves = new List<Square>();
 
-            foreach (var direction in Enum.GetValues(directions))
+            foreach (var direction in directions)
             {
                 var newPosition = board.FindPiece(piece);
 
-                GetChange(direction, out var rowChange, out var colChange);
-
                 do
                 {
-                    newPosition = NextMove(newPosition, rowChange, colChange);
+                    newPosition = NextMove(newPosition, direction);
 
                     if (newPosition.OutOfBounds() || piece.IsFriendly(board.GetPiece(newPosition)))
                     {
@@ -98,9 +44,9 @@ namespace Chessington.GameEngine.Pieces
             return moves;
         }
 
-        private static Square NextMove(Square position, int rowChange, int colChange)
+        private static Square NextMove(Square position, Direction direction)
         {
-            return Square.At(position.Row + rowChange, position.Col + colChange);
+            return Square.At(position.Row + direction.RowChange, position.Col + direction.ColChange);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Chessington.GameEngine.Pieces
         {
 
             var position = board.FindPiece(this);
-            var possibleMoves = new HashSet<Square>(new Square[]
+            var possibleMoves = new List<Square>(new[]
             {
                 Square.At(position.Row - 1, position.Col),
                 Square.At(position.Row + 1, position.Col),
@@ -23,11 +23,11 @@ namespace Chessington.GameEngine.Pieces
                 Square.At(position.Row +1, position.Col + 1),
             });
 
-            var moves = new HashSet<Square>();
+            var moves = new List<Square>();
 
             foreach (var square in possibleMoves)
             {
-                if (IsValid(board, square))
+                if (IsValidMove(board, square))
                 {
                     moves.Add(square);
                 }

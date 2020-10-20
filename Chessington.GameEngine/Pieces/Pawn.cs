@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Chessington.GameEngine.Pieces
 {
@@ -25,19 +24,19 @@ namespace Chessington.GameEngine.Pieces
             );
 
             var rightCapture = Square.At(position.Row + step, position.Col + 1);
-            if (IsValid(board, rightCapture) && !board.IsEmpty(rightCapture))
+            if (IsValidMove(board, rightCapture) && !board.IsEmpty(rightCapture))
             {
                 moves.Add(rightCapture);
             }
             
             var leftCapture= Square.At(position.Row + step, position.Col - 1);
-            if (IsValid(board, leftCapture) && !board.IsEmpty(leftCapture))
+            if (IsValidMove(board, leftCapture) && !board.IsEmpty(leftCapture))
             {
                 moves.Add(leftCapture);
             }
 
             var oneForward = Square.At(position.Row + step, position.Col);
-            if (IsValid(board, oneForward) && board.IsEmpty(oneForward))
+            if (IsValidMove(board, oneForward) && board.IsEmpty(oneForward))
             {
                 moves.Add(oneForward);
             }
@@ -47,7 +46,7 @@ namespace Chessington.GameEngine.Pieces
             }
 
             var twoForward = Square.At(position.Row + step * 2, position.Col);
-            if (NeverMoved && IsValid(board, twoForward) && board.IsEmpty(twoForward))
+            if (NeverMoved && IsValidMove(board, twoForward) && board.IsEmpty(twoForward))
             {
                 moves.Add(twoForward);
             }

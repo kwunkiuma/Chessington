@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Policy;
+﻿using System.Collections.Generic;
 
 namespace Chessington.GameEngine.Pieces
 {
@@ -32,7 +28,7 @@ namespace Chessington.GameEngine.Pieces
             NeverMoved = true;
         }
 
-        protected bool IsValid(Board board, Square square)
+        protected bool IsValidMove(Board board, Square square)
         {
             return !square.OutOfBounds() && !IsFriendly(board.GetPiece(square));
         }
