@@ -1,51 +1,55 @@
 ﻿using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Chessington.GameEngine.Pieces
 {
     public class Pawn : Piece
     {
-        public Pawn(Player player) 
-            : base(player) { }
+        public bool EnPassant { get; private set; }
+
+        public Pawn(Player player)
+            : base(player)
+        {
+            EnPassant = false;
+        }
 
         public override IEnumerable<Square> GetAvailableMoves(Board board)
         {
             var moves = new HashSet<Square>();
-            Square newPosition;
 
-            var pos = board.FindPiece(this);
+            var position = board.FindPiece(this);
 
-            var step = (Player == Player.Black 
-                    ? 1
-                    : -1
-                );
+            var step = (Player == Player.Black
+                ? 1
+                : -1
+            );
 
-            newPosition = Square.At(pos.Row + step, pos.Col + 1);
-            if (!newPosition.OutOfBounds() && board.GetPiece(newPosition) != null && !Friendly(board.GetPiece(newPosition)))
+            var rightCapture = Square.At(position.Row + step, position.Col + 1);
+            if (IsValid(board, rightCapture) && !board.IsEmpty(rightCapture))
             {
-                moves.Add(newPosition);
+                moves.Add(rightCapture);
+            }
+            
+            var leftCapture= Square.At(position.Row + step, position.Col - 1);
+            if (IsValid(board, leftCapture) && !board.IsEmpty(leftCapture))
+            {
+                moves.Add(leftCapture);
             }
 
-            newPosition = Square.At(pos.Row + step, pos.Col - 1);
-
-            if (!newPosition.OutOfBounds() && board.GetPiece(newPosition) != null && !Friendly(board.GetPiece(newPosition)))
+            var oneForward = Square.At(position.Row + step, position.Col);
+            if (IsValid(board, oneForward) && board.IsEmpty(oneForward))
             {
-                moves.Add(newPosition);
+                moves.Add(oneForward);
             }
-
-            newPosition = Square.At(pos.Row + step, pos.Col);
-
-            if (newPosition.OutOfBounds() || board.GetPiece(newPosition) != null)
+            else
             {
                 return moves;
             }
 
-            moves.Add(newPosition);
-
-            newPosition = Square.At(pos.Row + step * 2, pos.Col);
-
-            if (NeverMoved && board.GetPiece(newPosition) == null && !newPosition.OutOfBounds())
+            var twoForward = Square.At(position.Row + step * 2, position.Col);
+            if (NeverMoved && IsValid(board, twoForward) && board.IsEmpty(twoForward))
             {
-                moves.Add(newPosition);
+                moves.Add(twoForward);
             }
 
             return moves;

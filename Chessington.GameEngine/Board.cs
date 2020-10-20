@@ -64,6 +64,11 @@ namespace Chessington.GameEngine
             CurrentPlayer = movingPiece.Player == Player.White ? Player.Black : Player.White;
             OnCurrentPlayerChanged(CurrentPlayer);
         }
+
+        public bool IsEmpty(Square square)
+        {
+            return GetPiece(square) == null;
+        }
         
         public delegate void PieceCapturedEventHandler(Piece piece);
         

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Chessington.GameEngine.Pieces
 {
@@ -9,12 +10,8 @@ namespace Chessington.GameEngine.Pieces
 
         public override IEnumerable<Square> GetAvailableMoves(Board board)
         {
-            var position = board.FindPiece(this);
-            var moves = LateralMoves(board);
-
-            moves.UnionWith(DiagonalMoves(board));
-
-            moves.Remove(position);
+            var moves = MoveHelper.GetStraightMoves(board, this, typeof(Lateral));
+            moves.UnionWith(MoveHelper.GetStraightMoves(board, this, typeof(Diagonal)));
             return moves;
         }
     }

@@ -21,101 +21,20 @@ namespace Chessington.GameEngine.Pieces
             NeverMoved = false;
         }
 
+        public bool IsFriendly(Piece piece)
+        {
+            return (piece != null && piece.Player == Player);
+        }
+
         protected Piece(Player player)
         {
             Player = player;
             NeverMoved = true;
         }
 
-        protected HashSet<Square> LateralMoves(Board board)
+        protected bool IsValid(Board board, Square square)
         {
-            var moves = new HashSet<Square>();
-            var position = board.FindPiece(this);
-
-            for (var i = 2; i < 6; i++)
-            {
-                // One of the two variables will be assigned to 1/-1 while the other is assigned 0
-                var rowDiff = Convert.ToInt32(Math.Pow(-(i % 2), i / 2));
-                var colDiff = Convert.ToInt32(Math.Pow(-1 + (i % 2), i / 2));
-
-                var row = position.Row;
-                var col = position.Col;
-
-                row += rowDiff;
-                col += colDiff;
-
-                while (Math.Min(row, col) >= 0 && Math.Max(row, col) <= 7)
-                {
-                    if (board.GetPiece(Square.At(row, col)) != null)
-                    {
-                        if (board.GetPiece(Square.At(row, col)).Player != Player)
-                        {
-                            moves.Add(Square.At(row, col));
-                            break;
-                        }
-
-                        if (board.GetPiece(Square.At(row, col)).Player == Player)
-                        {
-                            break;
-                        }
-                    }
-
-                    moves.Add(Square.At(row, col));
-
-                    row += rowDiff;
-                    col += colDiff;
-                }
-            }
-
-            return moves;
-        }
-
-        protected HashSet<Square> DiagonalMoves(Board board)
-        {
-            var moves = new HashSet<Square>();
-            var position = board.FindPiece(this);
-
-            for (var i = 2; i < 6; i++)
-            {
-                // Iterates through combinations of 1 and -1
-                var rowDiff = Convert.ToInt32(Math.Pow(-1, (i + 1) / 2));
-                var colDiff = Convert.ToInt32(Math.Pow(-1, i / 2));
-
-                var row = position.Row;
-                var col = position.Col;
-
-                row += rowDiff;
-                col += colDiff;
-
-                while (Math.Min(row, col) >= 0 && Math.Max(row, col) <= 7)
-                {
-                    if (board.GetPiece(Square.At(row, col)) != null)
-                    {
-                        if (board.GetPiece(Square.At(row, col)).Player != Player)
-                        {
-                            moves.Add(Square.At(row, col));
-                            break;
-                        }
-
-                        if (board.GetPiece(Square.At(row, col)).Player == Player)
-                        {
-                            break;
-                        }
-                    }
-
-                    moves.Add(Square.At(row, col));
-
-                    row += rowDiff;
-                    col += colDiff;
-                }
-            }
-
-            return moves;
-        }
-
-        protected bool Friendly(Piece piece)
-        {
-            return (piece != null && piece.Player == this.Player);
+            return !square.OutOfBounds() && !IsFriendly(board.GetPiece(square));
         }
     }
 }

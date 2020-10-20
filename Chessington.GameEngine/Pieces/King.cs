@@ -11,21 +11,28 @@ namespace Chessington.GameEngine.Pieces
         {
 
             var position = board.FindPiece(this);
+            var possibleMoves = new HashSet<Square>(new Square[]
+            {
+                Square.At(position.Row - 1, position.Col),
+                Square.At(position.Row + 1, position.Col),
+                Square.At(position.Row, position.Col - 1),
+                Square.At(position.Row, position.Col + 1),
+                Square.At(position.Row -1, position.Col - 1),
+                Square.At(position.Row -1, position.Col + 1),
+                Square.At(position.Row +1, position.Col - 1),
+                Square.At(position.Row +1, position.Col + 1),
+            });
+
             var moves = new HashSet<Square>();
 
-            for (var row = -1; row <= 1; row++)
+            foreach (var square in possibleMoves)
             {
-                for (var col = -1; col <= 1; col++)
+                if (IsValid(board, square))
                 {
-                    var newPosition = Square.At(position.Row + row, position.Col + col);
-                    if (!newPosition.OutOfBounds() && !Friendly(board.GetPiece(newPosition)))
-                    {
-                        moves.Add(newPosition);
-                    }
+                    moves.Add(square);
                 }
             }
 
-            moves.Remove(position);
             return moves;
         }
     }

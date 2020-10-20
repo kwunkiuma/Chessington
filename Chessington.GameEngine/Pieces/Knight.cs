@@ -11,26 +11,28 @@ namespace Chessington.GameEngine.Pieces
         public override IEnumerable<Square> GetAvailableMoves(Board board)
         {
             var position = board.FindPiece(this);
+            var possibleMoves = new HashSet<Square>(new Square[]
+            {
+                Square.At(position.Row - 1, position.Col - 2),
+                Square.At(position.Row - 1, position.Col + 2),
+                Square.At(position.Row + 1, position.Col - 2),
+                Square.At(position.Row + 1, position.Col + 2),
+                Square.At(position.Row - 2, position.Col - 1),
+                Square.At(position.Row - 2, position.Col + 1),
+                Square.At(position.Row + 2, position.Col - 1),
+                Square.At(position.Row + 2, position.Col + 1),
+            });
+
             var moves = new HashSet<Square>();
 
-            for (var row = 0; row < 8; row++)
+            foreach (var square in possibleMoves)
             {
-                for (var col = 0; col < 8; col++)
+                if (IsValid(board, square))
                 {
-                    var rowDiff = Math.Abs(position.Row - row);
-                    var colDiff = Math.Abs(position.Col - col);
-
-                    if (board.GetPiece(Square.At(row, col)) != null && board.GetPiece(Square.At(row, col)).Player == this.Player)
-                    {
-                        continue;
-                    }
-
-                    if (rowDiff + colDiff == 3 && rowDiff * colDiff != 0)
-                    {
-                        moves.Add(Square.At(row, col));
-                    }
+                    moves.Add(square);
                 }
             }
+
 
             return moves;
         }
