@@ -2,8 +2,8 @@
 {
     public class Direction
     {
-        public int RowChange;
-        public int ColChange;
+        public readonly int RowChange;
+        public readonly int ColChange;
 
         public Direction(int rowChange, int colChange)
         {
