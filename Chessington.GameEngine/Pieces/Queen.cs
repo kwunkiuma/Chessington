@@ -10,7 +10,7 @@ namespace Chessington.GameEngine.Pieces
 
         public override IEnumerable<Square> GetAvailableMoves(Board board)
         {
-            return Enumerable.Empty<Square>();
+            return MoveHelper.GetStraightMoves(board, this, MoveHelper.Lateral).Concat(MoveHelper.GetStraightMoves(board, this, MoveHelper.Diagonal));
         }
     }
 }

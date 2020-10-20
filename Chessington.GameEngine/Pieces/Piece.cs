@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace Chessington.GameEngine.Pieces
 {
     public abstract class Piece
     {
-        protected Piece(Player player)
-        {
-            Player = player;
-        }
-
         public Player Player { get; private set; }
+
+        protected bool NeverMoved { get; private set; }
 
         public abstract IEnumerable<Square> GetAvailableMoves(Board board);
 
@@ -19,6 +14,23 @@ namespace Chessington.GameEngine.Pieces
         {
             var currentSquare = board.FindPiece(this);
             board.MovePiece(currentSquare, newSquare);
+            NeverMoved = false;
+        }
+
+        public bool IsFriendly(Piece piece)
+        {
+            return (piece != null && piece.Player == Player);
+        }
+
+        protected Piece(Player player)
+        {
+            Player = player;
+            NeverMoved = true;
+        }
+
+        protected bool IsValidMove(Board board, Square square)
+        {
+            return !square.OutOfBounds() && !IsFriendly(board.GetPiece(square));
         }
     }
 }
